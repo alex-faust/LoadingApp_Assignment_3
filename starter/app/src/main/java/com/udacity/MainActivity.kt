@@ -9,9 +9,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
+import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.udacity.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +26,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var pendingIntent: PendingIntent
     private lateinit var action: NotificationCompat.Action
 
+    private val radioGroup: RadioGroup = binding.radioBtnGroup
+
+    //private val custom_button = R.layout.content_main
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -31,10 +38,18 @@ class MainActivity : AppCompatActivity() {
 
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
+        if(radioGroup.checkedRadioButtonId == -1) {
+            Toast.makeText(this, "Please select the file to download", Toast.LENGTH_SHORT).show()
+        }
+
         // TODO: Implement code below
-//        binding.custom_button.setOnClickListener {
-//            download()
-//        }
+       binding.custom_button.setOnClickListener {
+           //TODO: Look into how to use the radio group instead of individual ones
+           if(radioGroup.checkedRadioButtonId == -1) {
+            Toast.makeText(this, "Please select the file to download", Toast.LENGTH_SHORT).show()
+        }
+           download()
+        }
     }
 
     private val receiver = object : BroadcastReceiver() {
