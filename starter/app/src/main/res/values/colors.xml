@@ -12,4 +12,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
 
+    <color name="button_overlay">#006064</color>
+    <color name="button_background">#26C6DA</color>
+    <color name="progress_circle">#FFCA28</color>
+
+
+
 </resources>

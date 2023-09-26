@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
+    tools:context=".activity.MainActivity"
     tools:showIn="@layout/activity_main">
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layoutDescription="@xml/button_motion" />
 
     <com.udacity.LoadingButton
         android:id="@+id/custom_button"
@@ -23,4 +28,3 @@
         app:layout_constraintVertical_bias="0.871" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
