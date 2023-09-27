@@ -10,11 +10,6 @@
     tools:context=".activity.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <androidx.constraintlayout.motion.widget.MotionLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layoutDescription="@xml/button_motion" />
-
     <com.udacity.LoadingButton
         android:id="@+id/custom_button"
         android:layout_width="0dp"

@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="LoadingButton">
         <attr name="text" format="string"/>
+        <attr name="motion_speed" format="integer"/>
 
     </declare-styleable>
 </resources>

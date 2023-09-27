@@ -21,7 +21,6 @@ import com.udacity.ButtonState
 import com.udacity.LoadingButton
 import com.udacity.R
 import com.udacity.databinding.ActivityMainBinding
-import com.udacity.utils.sendNotification
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,11 +30,6 @@ class MainActivity : AppCompatActivity() {
     private var downloadID: Long = 0
     private val REQUEST_CODE = 0
     private var fileName: String = ""
-
-    private lateinit var notificationManager: NotificationManager
-    private lateinit var pendingIntent: PendingIntent
-    private lateinit var action: NotificationCompat.Action
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -48,10 +42,6 @@ class MainActivity : AppCompatActivity() {
 
         createChannel(getString(R.string.channel_id), getString(R.string.channel_name))
 
-
-
-
-
         customButton.setOnClickListener {
             ButtonState.Clicked
             if (binding.radioBtnGroup.checkedRadioButtonId == -1) {
@@ -60,17 +50,17 @@ class MainActivity : AppCompatActivity() {
             } else {
                 when (binding.radioBtnGroup.checkedRadioButtonId) {
                     R.id.glide_radio_btn -> {
-                        ButtonState.Loading
+                        customButton.updateStatus(ButtonState.Loading)
                         fileName = getString(R.string.glide_radio_text)
                         download(glideURL)
                     }
                     R.id.loadapp_radio_btn -> {
-                        ButtonState.Loading
+                        customButton.updateStatus(ButtonState.Loading)
                         fileName = getString(R.string.loadapp_radio_text)
                         download(loadAppURL)
                     }
                     R.id.retrofit_radio_btn -> {
-                        ButtonState.Loading
+                        customButton.updateStatus(ButtonState.Loading)
                         fileName = getString(R.string.retrofit_radio_text)
                         download(retrofitURL)
                     }
@@ -83,9 +73,7 @@ class MainActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
 
-            customButton.setText(getString(R.string.button_loading))
             customButton.updateStatus(ButtonState.Completed)
-            Toast.makeText(baseContext, "Receiver", Toast.LENGTH_SHORT).show()
 
             try {
                 if (id == downloadID) {
@@ -118,10 +106,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         detailActivityIntent.putExtra(getString(
                             R.string.downloaded_file_name_key), fileName)
-                        detailActivityIntent.putExtra("KEY", NOTIFICATION_ID)
-
-                        val titleColumn = cursor.getColumnIndex(DownloadManager.COLUMN_TITLE)
-                        val title = cursor.getString(titleColumn)
+                        detailActivityIntent.putExtra(getString(R.string.notification_id), NOTIFICATION_ID)
 
                         val builder = NotificationCompat.Builder(baseContext,
                             getString(R.string.channel_id))
@@ -132,24 +117,20 @@ class MainActivity : AppCompatActivity() {
                             .setAutoCancel(true)
                             .addAction(
                                 R.drawable.ic_assistant_black_24dp,
-                                title,
+                                getString(R.string.notification_button),
                                 PendingIntent.getActivity(baseContext, REQUEST_CODE,
                                     detailActivityIntent, FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
                             )
 
                         val notificationManager = getSystemService(NotificationManager::class.java)
-                        notificationManager.sendNotification(getString(R.string.channel_id), baseContext)
-                        notificationManager.notify(69, builder.build())
-
+                        notificationManager.notify(NOTIFICATION_ID, builder.build())
                     }
                 }
-            } catch (exception: Exception){
-                Toast.makeText(baseContext, "LoadApp is selected", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception){
+                e.printStackTrace()
             }
         }
     }
-
-
 
     private fun download(url: String) {
         val request =
@@ -188,8 +169,6 @@ class MainActivity : AppCompatActivity() {
         private const val loadAppURL =
             "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
         private const val retrofitURL = "https://github.com/square/retrofit"
-
-        private const val CHANNEL_ID = "channelId"
         private const val NOTIFICATION_ID = 1
     }
 }
