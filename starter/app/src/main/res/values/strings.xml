@@ -20,6 +20,7 @@
     <string name="download_status_fail">Fail</string>
     <string name="downloaded_file_status_key">Status</string>
     <string name="downloaded_file_name_key">File Name</string>
-    <string name="channel_id">channel id</string>
+    <string name="channel_id">Channel ID</string>
+    <string name="channel_name">Downloads</string>
 
 </resources>

@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     private var downloadID: Long = 0
     private val REQUEST_CODE = 0
-    private val context: Context = this
+    private var fileName: String = ""
 
     private lateinit var notificationManager: NotificationManager
     private lateinit var pendingIntent: PendingIntent
@@ -46,14 +46,13 @@ class MainActivity : AppCompatActivity() {
 
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
-        createChannel("channelID", "channelName")
+        createChannel(getString(R.string.channel_id), getString(R.string.channel_name))
 
 
 
 
 
         customButton.setOnClickListener {
-            //TODO: Look into how to use the radio group instead of individual ones
             ButtonState.Clicked
             if (binding.radioBtnGroup.checkedRadioButtonId == -1) {
                 Toast.makeText(this, "Please select the file to download", Toast.LENGTH_SHORT)
@@ -62,15 +61,17 @@ class MainActivity : AppCompatActivity() {
                 when (binding.radioBtnGroup.checkedRadioButtonId) {
                     R.id.glide_radio_btn -> {
                         ButtonState.Loading
+                        fileName = getString(R.string.glide_radio_text)
                         download(glideURL)
-                        //customButton.isEnabled = false
                     }
                     R.id.loadapp_radio_btn -> {
                         ButtonState.Loading
+                        fileName = getString(R.string.loadapp_radio_text)
                         download(loadAppURL)
                     }
                     R.id.retrofit_radio_btn -> {
                         ButtonState.Loading
+                        fileName = getString(R.string.retrofit_radio_text)
                         download(retrofitURL)
                     }
                 }
@@ -81,8 +82,10 @@ class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+
             customButton.setText(getString(R.string.button_loading))
             customButton.updateStatus(ButtonState.Completed)
+            Toast.makeText(baseContext, "Receiver", Toast.LENGTH_SHORT).show()
 
             try {
                 if (id == downloadID) {
@@ -108,23 +111,30 @@ class MainActivity : AppCompatActivity() {
                                     getString(R.string.download_status_fail)
                                 )
                             }
-                            else -> {}
+                            else -> {
+                                Toast.makeText(baseContext,
+                                    "Nothing here", Toast.LENGTH_SHORT).show()
+                            }
                         }
-                        detailActivityIntent.putExtra(getString(R.string.downloaded_file_name_key), getString(R.string.glide_radio_text))
-                        detailActivityIntent.putExtra("KEY", 69)
+                        detailActivityIntent.putExtra(getString(
+                            R.string.downloaded_file_name_key), fileName)
+                        detailActivityIntent.putExtra("KEY", NOTIFICATION_ID)
 
                         val titleColumn = cursor.getColumnIndex(DownloadManager.COLUMN_TITLE)
                         val title = cursor.getString(titleColumn)
 
-                        val builder = NotificationCompat.Builder(baseContext, "channel ID")
+                        val builder = NotificationCompat.Builder(baseContext,
+                            getString(R.string.channel_id))
                             .setSmallIcon(R.drawable.ic_assistant_black_24dp)
-                            .setContentTitle("")
-                            .setContentText("")
+                            .setContentTitle(baseContext.getString(R.string.notification_title))
+                            .setContentText(getString(R.string.download_status_success))
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .setAutoCancel(true)
                             .addAction(
                                 R.drawable.ic_assistant_black_24dp,
                                 title,
-                                PendingIntent.getActivity(baseContext, 0, detailActivityIntent, FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
+                                PendingIntent.getActivity(baseContext, REQUEST_CODE,
+                                    detailActivityIntent, FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
                             )
 
                         val notificationManager = getSystemService(NotificationManager::class.java)
@@ -155,6 +165,24 @@ class MainActivity : AppCompatActivity() {
             downloadManager.enqueue(request)// enqueue puts the download request in the queue.
     }
 
+    private fun createChannel(channel_Id: String, channelName: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                channel_Id,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                setShowBadge(false)
+            }
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.RED
+            notificationChannel.enableVibration(true)
+            notificationChannel.description = getString(R.string.notification_description)
+
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+    }
     companion object {
         private const val glideURL = "https://github.com/bumptech/glide"
         private const val loadAppURL =
@@ -162,31 +190,7 @@ class MainActivity : AppCompatActivity() {
         private const val retrofitURL = "https://github.com/square/retrofit"
 
         private const val CHANNEL_ID = "channelId"
-    }
-}
-
-private fun createChannel(channelId: String, channelName: String) {
-
-    //channels are only available past version 26 which is why you need to do a version check
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val notificationChannel = NotificationChannel(
-            channelId,
-            channelName,
-            NotificationManager.IMPORTANCE_HIGH)
-            .apply {
-            setShowBadge(false)
-        }
-        notificationChannel.enableLights(true)
-        notificationChannel.lightColor = Color.RED
-        notificationChannel.enableVibration(true)
-        notificationChannel.description = "Notification description"
-
-
-        //val notificationManager = getSystemService(context, NotificationManager::class.java)
-
-
-
-        //notificationManager?.createNotificationChannel(notificationChannel)
+        private const val NOTIFICATION_ID = 1
     }
 }
 
