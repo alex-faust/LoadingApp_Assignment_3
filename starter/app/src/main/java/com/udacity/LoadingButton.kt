@@ -22,7 +22,7 @@ class LoadingButton @JvmOverloads constructor(
     private var widthSize = 0
     private var heightSize = 0
     private val pointPosition: PointF by lazy {
-        PointF((width / 2).toFloat(), (height / 2).toFloat())
+        PointF((width / 2).toFloat(), (height / 2 + 20).toFloat())
     }
 
     private var progressW = 0F
@@ -40,7 +40,7 @@ class LoadingButton @JvmOverloads constructor(
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         textAlign = Paint.Align.CENTER
-        textSize = 55.0f
+        textSize = 60.0f
         typeface = Typeface.create("", Typeface.NORMAL)
         color = resources.getColor(R.color.white)
     }
