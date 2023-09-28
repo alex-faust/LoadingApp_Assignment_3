@@ -64,7 +64,6 @@
             android:layout_height="132dp"
             android:layout_marginStart="60dp"
             android:layout_marginTop="56dp"
-            android:textSize="@dimen/radio_group_text_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/fileNameID"
