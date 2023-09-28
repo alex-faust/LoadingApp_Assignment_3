@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".activity.MainActivity">
+        android:layout_height="wrap_content"
+        tools:context=".activity.MainActivity">
 
         <include
             android:id="@+id/included"
@@ -27,42 +26,77 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="509dp">
 
-            <RadioGroup
-                android:id="@+id/radio_btn_group"
-                android:layout_width="403dp"
-                android:layout_height="222dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="271dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="589dp">
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="418dp"
+                android:layout_height="217dp"
+                android:layout_marginTop="52dp"
+                android:background="@color/colorPrimaryDark"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/downloadImg"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/download_image_button"
+                    app:srcCompat="@drawable/download" />
+            </LinearLayout>
+
+            <RadioGroup
+                android:id="@+id/radio_btn_group"
+                android:layout_width="404dp"
+                android:layout_height="338dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="80dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.444"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
                 <RadioButton
                     android:id="@+id/glide_radio_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/glide_radio_text" />
+                    android:maxLines="2"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/glide_radio_text"
+                    android:textSize="20sp" />
 
                 <RadioButton
                     android:id="@+id/loadapp_radio_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/loadapp_radio_text" />
+                    android:maxLines="2"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/loadapp_radio_text"
+                    android:textSize="20sp" />
 
                 <RadioButton
                     android:id="@+id/retrofit_radio_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/retrofit_radio_text" />
+                    android:maxLines="2"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/retrofit_radio_text"
+                    android:textSize="20sp" />
 
             </RadioGroup>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

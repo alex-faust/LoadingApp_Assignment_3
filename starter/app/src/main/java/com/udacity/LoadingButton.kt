@@ -63,6 +63,8 @@ class LoadingButton @JvmOverloads constructor(
                         progressC = 360 * animation.animatedValue as Float
                         invalidate()
                     }
+                    repeatCount = ValueAnimator.INFINITE
+                    repeatMode = ValueAnimator.RESTART
                 }
                 valueAnimator.addListener(object: AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
@@ -71,16 +73,9 @@ class LoadingButton @JvmOverloads constructor(
                     }
                 })
                 valueAnimator.start()
-            }
-            ButtonState.Completed -> {
+            } else -> {
                 buttonText = "Download"
                 valueAnimator.cancel()
-                progressW = 0f
-                progressC = 0f
-                invalidate()
-            }
-            else -> {
-                buttonText = "Download"
                 progressW = 0f
                 progressC = 0f
                 invalidate()
@@ -106,10 +101,9 @@ class LoadingButton @JvmOverloads constructor(
             ButtonState.Loading -> {
                 canvas.drawColor(resources.getColor(R.color.button_background))
                 canvas.drawRect(0f, 0f, progressW, height.toFloat(), buttonPaint)
-                Toast.makeText(context, "$progressW and $progressC", Toast.LENGTH_SHORT).show()
                 canvas.drawArc(
                     (width - 200).toFloat(), (height - 150).toFloat(), (width - 30).toFloat(),
-                    (height - 15).toFloat(), progressC, 50f, true, circlePaint
+                    (height - 15).toFloat(), 0f, progressC, true, circlePaint
                 )
                 canvas.drawText(buttonText, pointPosition.x, pointPosition.y, textPaint)
             }

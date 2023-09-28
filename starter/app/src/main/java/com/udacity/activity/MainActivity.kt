@@ -50,17 +50,14 @@ class MainActivity : AppCompatActivity() {
             } else {
                 when (binding.radioBtnGroup.checkedRadioButtonId) {
                     R.id.glide_radio_btn -> {
-                        customButton.updateStatus(ButtonState.Loading)
                         fileName = getString(R.string.glide_radio_text)
                         download(glideURL)
                     }
                     R.id.loadapp_radio_btn -> {
-                        customButton.updateStatus(ButtonState.Loading)
                         fileName = getString(R.string.loadapp_radio_text)
                         download(loadAppURL)
                     }
                     R.id.retrofit_radio_btn -> {
-                        customButton.updateStatus(ButtonState.Loading)
                         fileName = getString(R.string.retrofit_radio_text)
                         download(retrofitURL)
                     }
@@ -72,8 +69,6 @@ class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-
-            customButton.updateStatus(ButtonState.Completed)
 
             try {
                 if (id == downloadID) {
@@ -129,10 +124,12 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception){
                 e.printStackTrace()
             }
+            customButton.updateStatus(ButtonState.Completed)
         }
     }
 
     private fun download(url: String) {
+        customButton.updateStatus(ButtonState.Loading)
         val request =
             DownloadManager.Request(Uri.parse(url))
                 .setTitle(getString(R.string.app_name))
